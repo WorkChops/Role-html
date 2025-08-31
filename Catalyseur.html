@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil du Catalyseur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFBEB; /* Fond jaune très clair */
+        }
+        .font-patrick-hand {
+            font-family: 'Patrick Hand', cursive;
+        }
+        .tab-active {
+            background-color: #F59E0B; /* Ambre */
+            color: white;
+            border-color: #F59E0B;
+        }
+        .tab-inactive {
+            background-color: white;
+            color: #4B5563; /* Gris */
+            border-color: #D1D5DB;
+        }
+        /* Style pour les listes à puces */
+        .content-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .content-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .content-list li::before {
+            content: '⚡';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <main class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- Colonne de l'avatar -->
+        <div class="md:col-span-1 bg-gradient-to-br from-amber-400 to-yellow-500 p-8 flex flex-col items-center justify-center text-center">
+            <div class="relative">
+                <div class="absolute -inset-2 bg-white/30 rounded-full blur-xl animate-pulse"></div>
+                
+                <!-- INSTRUCTIONS : Collez votre code SVG pour le Catalyseur ici -->
+                <svg viewBox="0 0 200 200" alt="Avatar du Catalyseur" class="relative w-48 h-48 md:w-56 md:h-56 object-contain border-4 border-white shadow-lg bg-white rounded-full p-2">
+                  <g>
+                    <path fill="#FBBF24" d="M100 180 C 60 180, 40 120, 100 80 C 160 120, 140 180, 100 180 Z"/>
+                    <path fill="#F59E0B" d="M100 80 C 90 70, 110 70, 100 80 L 120 60 L 80 60 Z" transform="rotate(20 100 70)"/>
+                    <circle cx="85" cy="115" r="10" fill="black"/>
+                    <circle cx="115" cy="115" r="10" fill="black"/>
+                    <path d="M90 145 C 100 160 110 145" stroke="black" stroke-width="5" fill="none" stroke-linecap="round"/>
+                  </g>
+                </svg>
+                <!-- FIN DE LA ZONE SVG -->
+
+            </div>
+            <h1 class="font-patrick-hand text-5xl text-white mt-6 drop-shadow-lg">Catalyseur</h1>
+            <p class="text-yellow-100 mt-2 font-semibold">Creative MVP Strategist</p>
+            <p class="text-yellow-100 mt-2 italic text-sm">"Met l’équipe en déséquilibre fertile pour faire émerger des idées disruptives."</p>
+        </div>
+
+        <!-- Colonne des informations -->
+        <div class="md:col-span-2 p-6 md:p-8">
+            <!-- Onglets de navigation -->
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+                    <button class="tab-btn tab-active" data-tab="mission">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        Mission
+                    </button>
+                    <button class="tab-btn tab-inactive" data-tab="pouvoirs">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                        Pouvoirs
+                    </button>
+                    <button class="tab-btn tab-inactive" data-tab="responsabilites">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z"/><path d="M18 9h2a2 2 0 0 1 2 2v9l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
+                        Responsabilités
+                    </button>
+                     <button class="tab-btn tab-inactive" data-tab="jouabilite">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 22v-6.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V22"/><path d="M6 18v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/><path d="M9 12V9a3 3 0 0 1 3-3h0a3 3 0 0 1 3 3v3"/></svg>
+                        Jouabilité
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Contenu des onglets -->
+            <div id="tab-content" class="text-gray-700 leading-relaxed">
+                <!-- Mission -->
+                <div class="tab-pane active" id="mission">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Dynamique Créative</h2>
+                    <p>Déclenche les dynamiques créatives, accélère les pistes d’exploration et met l’équipe en déséquilibre fertile pour faire émerger des idées inattendues ou disruptives.</p>
+                     <div class="mt-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg">
+                        <h3 class="font-semibold text-amber-800">Main de base :</h3>
+                        <p class="text-amber-700">3 cartes Eclat, 1 carte pause, 1 "Ce que tout le monde pense tout bas"</p>
+                    </div>
+                </div>
+
+                <!-- Pouvoirs -->
+                <div class="tab-pane hidden content-list" id="pouvoirs">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Talents Spéciaux</h2>
+                    <ul>
+                        <li><strong>Double Activation :</strong> Peut enchaîner deux cartes à la suite (dont une carte Eclat).</li>
+                        <li><strong>🤖 Pouvoir IA - Creative Spark :</strong> Utilise une IA pour générer une idée disruptive, stimulant la créativité du prototype.</li>
+                        <li><strong>💥 Pouvoir Test - Twist Express :</strong> 2 fois max (phases 3, 4 & 5). Peut appliquer une modification imprévue sur une idée. <strong>+1 jeton</strong> si validée, sinon défausse une carte et la modification est annulée.</li>
+                    </ul>
+                </div>
+
+                <!-- Responsabilités -->
+                <div class="tab-pane hidden content-list" id="responsabilites">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Rôles Clés</h2>
+                    <ul>
+                        <li><strong>🎨 Sculpteur du projet :</strong> Met en forme les idées clés de l’équipe (organise les idées sur le board ou dans l’espace).</li>
+                        <li><strong>📢 Porte-parole :</strong> Restitue les insights utilisateurs, synthétise les feedbacks collectés, verbalise les intuitions terrain.</li>
+                    </ul>
+                </div>
+                
+                 <!-- Jouabilité -->
+                <div class="tab-pane hidden" id="jouabilite">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Règle Spéciale</h2>
+                    <p><strong>Deck Piégé :</strong> Pendant la phase Idéation, il mélange le Deck Eclat et le Deck Idéation, puis pioche la moitié des cartes. Cela permet aux autres joueurs de piocher soit dans sa main, soit dans ce nouveau deck piégé.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Logique pour la gestion des onglets
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+
+                // Gérer l'état des boutons
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                });
+                button.classList.add('tab-active');
+                button.classList.remove('tab-inactive');
+
+                // Gérer l'affichage du contenu
+                tabPanes.forEach(pane => {
+                    if (pane.id === tabId) {
+                        pane.classList.remove('hidden');
+                        pane.classList.add('active');
+                    } else {
+                        pane.classList.add('hidden');
+                        pane.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // Style commun pour les boutons d'onglet
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.classList.add(
+                'flex', 'items-center', 'justify-center', 'w-1/2', 'md:w-auto', 'py-3', 'px-4', 
+                'border-b-2', 'font-semibold', 'text-sm', 'transition-colors', 'duration-300', 'ease-in-out',
+                'focus:outline-none', 'focus:ring-2', 'focus:ring-amber-500', 'focus:ring-offset-2',
+                'rounded-t-lg', 'whitespace-nowrap'
+            );
+        });
+
+    </script>
+
+</body>
+</html>
