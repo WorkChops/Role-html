@@ -1,493 +1,475 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>WorkChops — Toolbox: Séquence • Dés • Minuteur</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
-  <meta name="color-scheme" content="light dark">
-  <style>
-    :root {
-      --bg:#f9fafb;
-      --bg-2:#eef2f7;
-      --card:#ffffff;
-      --muted:#475569;
-      --brand:#2563eb;
-      --brand-2:#3b82f6;
-      --accent:#f59e0b;
-      --danger:#dc2626;
-      --glass: rgba(255,255,255,0.65);
-      --radius:12px;
-      --shadow:0 8px 28px rgba(0,0,0,0.06);
-      --mono:'Roboto Mono', monospace;
-      --ui:'Poppins', sans-serif;
-      --title:'Inter', sans-serif;
-    }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WorkChops — Toolbox: Séquence • Dés • Minuteur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+  <meta name="color-scheme" content="light dark">
+  <style>
+    /* ========= Color system - high contrast, accessible ========= */
+    :root{
+      --bg: #f6f9fc;
+      --panel: #ffffff;
+      --muted: #556071;
+      --text: #0f1724; /* very dark for max readability */
+      --primary: #2563eb; /* main action */
+      --primary-2: #60a5fa; /* lighter accent */
+      --accent: #f59e0b;
+      --danger: #dc2626;
+      --border: #e6eef9;
+      --glass: rgba(255,255,255,0.6);
+      --radius: 12px;
+      --shadow: 0 10px 30px rgba(2,6,23,0.06);
+      --mono: 'Roboto Mono', monospace;
+      --ui: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --title: 'Inter', system-ui, -apple-system, 'Segoe UI';
+      --focus: 3px solid rgba(37,99,235,0.18);
+    }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body {
-      margin:0;
-      font-family:var(--ui);
-      background:linear-gradient(180deg,var(--bg),var(--bg-2));
-      color:#1e293b;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:28px;
-    }
+    /* Dark mode variables (automatic) */
+    @media (prefers-color-scheme: dark) {
+      :root{
+        --bg: #0b1220;
+        --panel: #071124;
+        --muted: #9aa6b2;
+        --text: #e6eef6;
+        --primary: #4f8cff;
+        --primary-2: #7fb8ff;
+        --accent: #f6b95b;
+        --danger: #ff6b6b;
+        --border: rgba(255,255,255,0.04);
+        --shadow: 0 10px 30px rgba(2,6,23,0.5);
+        --focus: 3px solid rgba(79,140,255,0.12);
+      }
+    }
 
-    .shell{width:100%;max-width:1100px}
-    header.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{display:flex;flex-direction:column;line-height:1}
-    .logo .big{font-family:var(--title);font-size:20px;font-weight:900}
-    .logo .small{font-size:12px;color:var(--muted);margin-top:3px}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:var(--ui);background:linear-gradient(180deg,var(--bg),color-mix(in srgb, var(--bg) 85%, white 15%));color:var(--text);display:flex;align-items:flex-start;justify-content:center;padding:20px;
+    }
 
-    nav.tabs{display:flex;gap:8px}
-    .tab{
-      background:transparent;
-      border:1px solid transparent;
-      padding:8px 14px;
-      border-radius:999px;
-      font-weight:700;
-      cursor:pointer;
-      color:#334155;
-      transition:all 0.2s;
-    }
-    .tab:hover{background:#f1f5f9}
-    .tab[aria-pressed="true"]{
-      background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      color:#fff;
-      box-shadow:0 6px 18px rgba(59,130,246,0.25);
-    }
+    .shell{width:100%;max-width:1100px}
+    header.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{display:flex;flex-direction:column;line-height:1}
+    .logo .big{font-family:var(--title);font-size:20px;font-weight:900;color:var(--text)}
+    .logo .small{font-size:12px;color:var(--muted);margin-top:4px}
 
-    main.grid{display:grid;grid-template-columns:340px 1fr;gap:20px}
+    nav.tabs{display:flex;gap:8px}
+    .tab{background:transparent;border:1px solid transparent;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;color:var(--muted);transition:all 180ms}
+    .tab[aria-pressed="true"]{background:linear-gradient(90deg,var(--primary),var(--primary-2));color: #fff;box-shadow:0 6px 18px rgba(37,99,235,0.12)}
+    .tab:focus{outline:none;box-shadow:var(--focus)}
 
-    aside.panel{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px
-    }
-    .panel h3{margin:0 0 8px 0;font-size:15px}
-    .meta{font-size:13px;color:var(--muted);margin-bottom:12px}
+    main.grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
 
-    .card{
-      background:var(--card);
-      border-radius:14px;
-      padding:18px;
-      box-shadow:var(--shadow)
-    }
+    aside.panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;border:1px solid var(--border)}
+    .panel h3{margin:0 0 8px 0;font-size:14px}
+    .meta{font-size:13px;color:var(--muted);margin-bottom:12px}
 
-    /* ============ SECTIONS ============ */
-    .section{display:none}
-    .section.active{display:block}
+    .card{background:var(--panel);border-radius:12px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
 
-    /* ---- SEQUENCE UI ---- */
-    .seq-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-    .field{display:flex;flex-direction:column}
-    label{font-size:13px;font-weight:700;margin-bottom:6px}
-    input[type=number],select{
-      padding:10px;
-      border-radius:10px;
-      border:1px solid #d1d5db;
-      font-size:14px;
-      background:#f9fafb;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:12px 14px;
-      border-radius:12px;
-      border:0;
-      font-weight:800;
-      cursor:pointer;
-      transition:all .2s;
-    }
-    .btn.primary{
-      background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      color:#fff;
-      box-shadow:0 6px 18px rgba(59,130,246,0.22);
-    }
-    .btn.primary:hover{filter:brightness(1.05)}
-    .btn.ghost{
-      background:#f8fafc;
-      border:1px solid #e2e8f0;
-      color:#334155;
-    }
-    .btn.ghost:hover{background:#f1f5f9}
+    /* ============ SECTIONS ============ */
+    .section{display:none}
+    .section.active{display:block}
 
-    .sequence-grid{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      justify-content:center;
-      padding:18px
-    }
-    .digit{
-      min-width:64px;min-height:84px;
-      border-radius:10px;
-      background:#e0f2fe;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:900;font-size:34px;
-      color:#0f172a;
-      border:2px solid #bae6fd
-    }
+    /* ---- FORMS + CONTROLS ---- */
+    .seq-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+    .field{display:flex;flex-direction:column}
+    label{font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text)}
+    input[type=number],select,input[type=text]{padding:10px;border-radius:10px;border:1px solid var(--border);font-size:14px;background:color-mix(in srgb, var(--panel) 92%, white 8%);color:var(--text)}
 
-    /* ---- DICE UI ---- */
-    .scene-wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-    .scene{perspective:900px;display:flex;gap:12px}
-    .dice{
-      width:96px;height:96px;
-      position:relative;
-      transform-style:preserve-3d;
-      transition:transform 1.2s cubic-bezier(.22,.9,.35,1)
-    }
-    .face{
-      position:absolute;
-      width:100%;height:100%;
-      background:#fff;
-      border-radius:10px;
-      border:1px solid #e2e8f0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 5px 18px rgba(0,0,0,0.06);
-      backface-visibility:hidden;
-      padding:12px;box-sizing:border-box
-    }
-    .dot{width:18px;height:18px;background:#0f172a;border-radius:50%}
-    .dice .dots{display:flex;flex-wrap:wrap;gap:6px;width:100%;height:100%;align-content:center;justify-content:center}
-    .result{font-weight:800;color:var(--brand)}
+    .flex-row{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;border:0;font-weight:800;cursor:pointer;font-size:14px}
+    .btn.primary{background:linear-gradient(90deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 6px 18px rgba(37,99,235,0.12)}
+    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+    .btn.ghost:hover{background:color-mix(in srgb, var(--panel) 92%, var(--primary) 2%)}
 
-    /* ---- TIMER UI ---- */
-    .timer-display{
-      font-family:var(--mono);
-      font-size:56px;
-      text-align:center;
-      padding:18px;
-      border-radius:12px;
-      border:1px solid #e2e8f0;
-      background:#f8fafc;
-      color:#0f172a
-    }
-    .presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-    .preset{
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid #e2e8f0;
-      background:#f1f5f9;
-      cursor:pointer;
-      font-weight:700;
-      transition:all .2s;
-    }
-    .preset:hover{background:#e2e8f0}
-    .controls-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    .small-muted{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+    .small{font-size:13px;color:var(--muted)}
 
-    /* responsive */
-    @media (max-width:880px){main.grid{grid-template-columns:1fr}}
-    @media (max-width:520px){.sequence-grid .digit{min-width:54px;min-height:70px;font-size:28px}}
-  </style>
+    /* ---- SEQUENCE UI ---- */
+    .sequence-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:12px}
+    .digit{min-width:64px;min-height:84px;border-radius:10px;background:color-mix(in srgb, var(--primary) 6%, var(--panel) 94%);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:34px;color:var(--text);border:2px solid color-mix(in srgb, var(--primary) 12%, var(--border) 88%)}
+
+    /* ---- DICE UI ---- */
+    .scene-wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+    .scene{perspective:900px;display:flex;gap:12px}
+    .dice{width:96px;height:96px;position:relative;transform-style:preserve-3d;transition:transform 1.2s cubic-bezier(.22,.9,.35,1)}
+    .face{position:absolute;width:100%;height:100%;background:var(--panel);border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(2,6,23,0.06);backface-visibility:hidden;padding:12px;box-sizing:border-box}
+    .dot{width:16px;height:16px;background:var(--text);border-radius:50%}
+    .dice .dots{display:flex;flex-wrap:wrap;gap:6px;width:100%;height:100%;align-content:center;justify-content:center}
+
+    .dice-controls{display:flex;flex-direction:column;gap:8px}
+    .result{font-weight:800;color:var(--text)}
+
+    /* ---- TIMER UI ---- */
+    .timer-display{font-family:var(--mono);font-size:48px;text-align:center;padding:14px;border-radius:10px;border:1px solid var(--border);background:color-mix(in srgb, var(--panel) 94%, white 6%);color:var(--text)}
+    .presets{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+    .preset{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:transparent;cursor:pointer;font-weight:700;color:var(--muted)}
+    .controls-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+
+    .small-muted{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+    /* Responsive tweaks */
+    @media (max-width:920px){main.grid{grid-template-columns:1fr} .logo .big{font-size:18px}}
+    @media (max-width:520px){.sequence-grid .digit{min-width:54px;min-height:66px;font-size:28px} .timer-display{font-size:38px}}
+
+    /* Accessibility focus */
+    :focus{outline:none}
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px)}
+  </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo">
-          <span class="big">WorkChops</span>
-          <span class="small">Toolbox</span>
-        </div>
-      </div>
-      <nav class="tabs">
-                <button class="tab" id="tab-seq" data-target="sequence-section" aria-pressed="true">Séquence</button>
-        <button class="tab" id="tab-dice" data-target="dice-section" aria-pressed="false">Dés</button>
-        <button class="tab" id="tab-timer" data-target="timer-section" aria-pressed="false">Minuteur</button>
-      </nav>
-    </header>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900">WC</div>
+        <div class="logo">
+          <div class="big">WorkChops</div>
+          <div class="small">Toolbox — Séquence • Dés • Minuteur</div>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Outils WorkChops">
+        <button class="tab" data-target="seq" aria-pressed="true">Séquence</button>
+        <button class="tab" data-target="dice" aria-pressed="false">Dés</button>
+        <button class="tab" data-target="timer" aria-pressed="false">Minuteur</button>
+      </nav>
+    </header>
 
-    <main class="grid">
-            <aside class="panel">
-        
-                <div id="sequence-section" class="section active">
-          <h3>Générateur de Séquence</h3>
-          <p class="meta">Génère une séquence de nombres aléatoires uniques.</p>
-          <div class="seq-controls">
-            <div class="field">
-              <label for="seq-start">Début</label>
-              <input type="number" id="seq-start" value="1">
-            </div>
-            <div class="field">
-              <label for="seq-end">Fin</label>
-              <input type="number" id="seq-end" value="10">
-            </div>
-          </div>
-          <button class="btn primary" id="generate-sequence-btn">Générer la Séquence</button>
-        </div>
+    <main class="grid">
+      <aside class="panel" aria-labelledby="panelTitle">
+        <h3 id="panelTitle">Raccourcis & Export</h3>
+        <div class="meta">Basique — Copie configuration, téléchargement HTML. Conçu pour GitHub Pages (aucune dépendance externe critique).</div>
 
-                <div id="dice-section" class="section">
-          <h3>Lanceur de Dés</h3>
-          <p class="meta">Simule le lancer d'un ou plusieurs dés.</p>
-          <div class="seq-controls">
-            <div class="field">
-              <label for="dice-count">Nombre de dés</label>
-              <input type="number" id="dice-count" value="1" min="1" max="4">
-            </div>
-            <div class="field">
-              <label for="dice-sides">Faces</label>
-              <select id="dice-sides">
-                <option value="6">6 (Standard)</option>
-                <option value="4">4</option>
-                <option value="8">8</option>
-                <option value="10">10</option>
-                <option value="12">12</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-          </div>
-          <button class="btn primary" id="roll-dice-btn">Lancer les Dés</button>
-        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+          <button id="copyAllBtn" class="btn ghost" aria-label="Copier la configuration JSON">Copier la configuration (JSON)</button>
+          <button id="downloadBtn" class="btn ghost" aria-label="Télécharger la page HTML">Télécharger la page</button>
+        </div>
 
-                <div id="timer-section" class="section">
-          <h3>Minuteur</h3>
-          <p class="meta">Minuteur simple pour vos activités.</p>
-          <div class="presets">
-            <span class="preset" data-time="300">5 min</span>
-            <span class="preset" data-time="600">10 min</span>
-            <span class="preset" data-time="1800">30 min</span>
-          </div>
-          <div class="controls-row">
-            <button class="btn primary" id="timer-start-btn">Démarrer</button>
-            <button class="btn ghost" id="timer-reset-btn">Réinitialiser</button>
-          </div>
-          <p class="small-muted">Cliquez sur Démarrer/Pause.</p>
-        </div>
-      </aside>
+        <hr style="margin:14px 0;border:none;border-top:1px solid var(--border)">
+        <h3>Aide rapide</h3>
+        <div class="meta">Séquence – nombres uniques possibles | Dés – animation simple | Minuteur – format MM:SS</div>
+        <div style="margin-top:12px;font-size:13px;color:var(--muted)">Astuce : autorisez les doublons pour des tirages rapides. Les contrôles sont utilisables au clavier (Tab / Entrée).</div>
+      </aside>
 
-            <div class="content-panel">
-                <div class="section active" id="sequence-result-panel">
-          <div class="card">
-            <p style="text-align:center;color:var(--muted)">Cliquez sur "Générer la Séquence" pour afficher les nombres.</p>
-            <div class="sequence-grid" id="sequence-output">
-                          </div>
-          </div>
-        </div>
+      <section>
+        <!-- SEQUENCE -->
+        <div id="seq" class="section active" aria-labelledby="seqTitle">
+          <div class="card">
+            <h3 id="seqTitle">Générateur de Séquence</h3>
+            <div class="seq-controls">
+              <div class="field">
+                <label for="numDigits">Nombre d'éléments</label>
+                <input id="numDigits" type="number" min="1" max="20" value="3" aria-label="Nombre d'éléments">
+              </div>
+              <div class="field">
+                <label for="allowDuplicates">Doublons</label>
+                <select id="allowDuplicates" aria-label="Autoriser les doublons">
+                  <option value="false">Non (unique)</option>
+                  <option value="true">Oui (doublons autorisés)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="minNum">Valeur min</label>
+                <input id="minNum" type="number" value="1" aria-label="Valeur minimum">
+              </div>
+              <div class="field">
+                <label for="maxNum">Valeur max</label>
+                <input id="maxNum" type="number" value="9" aria-label="Valeur maximum">
+              </div>
+            </div>
 
-                <div class="section" id="dice-result-panel">
-          <div class="card">
-            <div class="scene-wrap" id="dice-output">
-              <p style="text-align:center;color:var(--muted);width:100%">Cliquez sur "Lancer les Dés" pour voir le résultat.</p>
-            </div>
-          </div>
-        </div>
+            <div class="flex-row" style="margin-bottom:12px">
+              <button id="generateSeq" class="btn primary">Générer</button>
+              <button id="shuffleSeq" class="btn ghost">Mélanger</button>
+              <button id="copySeq" class="btn ghost" style="display:none">Copier</button>
+            </div>
 
-                <div class="section" id="timer-result-panel">
-          <div class="card">
-            <div class="timer-display" id="timer-display">00:00</div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+            <div class="sequence-grid" id="sequenceGrid" aria-live="polite" aria-atomic="true">
+              <!-- cases -->
+            </div>
 
-        <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // ------------------------------------
-      // 1. Logique de navigation par onglets
-      // ------------------------------------
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          const targetId = this.dataset.target; // Ex: 'sequence-section'
+            <div style="margin-top:12px;text-align:center;color:var(--muted);font-size:13px">Résultat format: <strong id="seqFormat">1 - 2 - 3</strong></div>
+          </div>
+        </div>
 
-          // Désactiver tous les onglets
-          tabs.forEach(t => t.setAttribute('aria-pressed', 'false'));
-          
-          // Activer l'onglet cliqué
-          this.setAttribute('aria-pressed', 'true');
+        <!-- DICE -->
+        <div id="dice" class="section" aria-labelledby="diceTitle">
+          <div class="card">
+            <h3 id="diceTitle">Lancer de Dés Animé</h3>
+            <div class="scene-wrap">
+              <div class="scene" aria-hidden="false">
+                <div class="dice" id="dice1" style="--dice-size:96px">
+                  <div class="face front face-1"><div class="dots"><div class="dot"></div></div></div>
+                  <div class="face back face-6"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face right face-3"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face left face-4"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face top face-2"><div class="dots"><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face bottom face-5"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                </div>
 
-          // Cacher toutes les sections de contrôle et de résultat
-          document.querySelectorAll('.section').forEach(section => {
-            section.classList.remove('active');
-          });
+                <div class="dice" id="dice2" style="--dice-size:96px">
+                  <div class="face front face-1"><div class="dots"><div class="dot"></div></div></div>
+                  <div class="face back face-6"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face right face-3"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face left face-4"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face top face-2"><div class="dots"><div class="dot"></div><div class="dot"></div></div></div>
+                  <div class="face bottom face-5"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+                </div>
+              </div>
 
-          // Afficher la bonne section de contrôle
-          document.getElementById(targetId).classList.add('active');
+              <div class="dice-controls">
+                <div style="display:flex;gap:8px">
+                  <button id="rollButton" class="btn primary">Lancer</button>
+                  <button id="rerollButton" class="btn ghost">Relancer</button>
+                </div>
+                <div class="small-muted">Résultat: <span class="result" id="diceResult">—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          // Afficher la bonne section de résultat (en se basant sur l'ID de la section de contrôle)
-          const resultPanelId = targetId.replace('-section', '-result-panel');
-          document.getElementById(resultPanelId).classList.add('active');
-        });
-      });
+        <!-- TIMER -->
+        <div id="timer" class="section" aria-labelledby="timerTitle">
+          <div class="card">
+            <h3 id="timerTitle">Minuteur</h3>
+            <div id="timeDisplay" class="timer-display" contenteditable="true" aria-label="Éditez le temps en MM:SS">00:00</div>
+            <div class="presets" role="toolbar" aria-label="Présélections">
+              <button class="preset" data-time="300">5 min</button>
+              <button class="preset" data-time="900">15 min</button>
+              <button class="preset" data-time="1500">25 min</button>
+            </div>
 
+            <div class="controls-row">
+              <button id="startPauseBtn" class="btn primary">Démarrer</button>
+              <button id="resetBtn" class="btn ghost" disabled>Réinitialiser</button>
+            </div>
+            <div class="small-muted">Cliquez sur le temps pour l'éditer. Appuyez sur Entrée pour valider.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-      // ------------------------------------
-      // 2. Logique du Séquenceur
-      // ------------------------------------
-      const seqBtn = document.getElementById('generate-sequence-btn');
-      const seqOutput = document.getElementById('sequence-output');
-      const seqStart = document.getElementById('seq-start');
-      const seqEnd = document.getElementById('seq-end');
+  <script>
+    /* ========== MODULES NAMESPACED sous WC ========== */
+    const WC = {};
 
-      seqBtn.addEventListener('click', () => {
-        const start = parseInt(seqStart.value);
-        const end = parseInt(seqEnd.value);
-        
-        if (isNaN(start) || isNaN(end) || start > end) {
-          alert("Veuillez entrer des nombres valides avec 'Début' <= 'Fin'.");
-          return;
-        }
+    /* ------------------ TABS ------------------ */
+    (function(){
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(btn=>btn.addEventListener('click',()=>{
+        tabs.forEach(t=>t.setAttribute('aria-pressed','false'));
+        btn.setAttribute('aria-pressed','true');
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        const target = document.getElementById(btn.dataset.target);
+        if(target) target.classList.add('active');
+      }));
 
-        // Créer un tableau de nombres de 'start' à 'end'
-        let numbers = [];
-        for (let i = start; i <= end; i++) {
-          numbers.push(i);
-        }
+      // keyboard support
+      document.addEventListener('keydown',(e)=>{
+        if(e.key === '1') document.querySelector('.tab[data-target="seq"]').click();
+        if(e.key === '2') document.querySelector('.tab[data-target="dice"]').click();
+        if(e.key === '3') document.querySelector('.tab[data-target="timer"]').click();
+      });
+    })();
 
-        // Mélanger (shuffle) le tableau de manière aléatoire (Algorithme de Fisher-Yates)
-        for (let i = numbers.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [numbers[i], numbers[j]] = [numbers[j], numbers[i]]; // Échange
-        }
+    /* ------------------ SEQUENCE MODULE ------------------ */
+    (function(ns){
+      const numDigits = document.getElementById('numDigits');
+      const minNum = document.getElementById('minNum');
+      const maxNum = document.getElementById('maxNum');
+      const allowDuplicates = document.getElementById('allowDuplicates');
+      const generateBtn = document.getElementById('generateSeq');
+      const shuffleBtn = document.getElementById('shuffleSeq');
+      const copyBtn = document.getElementById('copySeq');
+      const grid = document.getElementById('sequenceGrid');
+      const seqFormat = document.getElementById('seqFormat');
 
-        // Afficher la séquence
-        seqOutput.innerHTML = ''; // Vider les résultats précédents
-        numbers.forEach(num => {
-          const digit = document.createElement('div');
-          digit.classList.add('digit');
-          digit.textContent = num;
-          seqOutput.appendChild(digit);
-        });
-      });
+      ns.current = [];
 
+      function renderBoxes(arr){
+        grid.innerHTML='';
+        arr.forEach(n=>{
+          const d = document.createElement('div');
+          d.className='digit';
+          d.textContent = n;
+          grid.appendChild(d);
+        });
+        seqFormat.textContent = arr.join(' - ');
+      }
 
-      // ------------------------------------
-      // 3. Logique des Dés
-      // ------------------------------------
-      const diceBtn = document.getElementById('roll-dice-btn');
-      const diceOutput = document.getElementById('dice-output');
-      const diceCountInput = document.getElementById('dice-count');
-      const diceSidesSelect = document.getElementById('dice-sides');
+      function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
-      // Fonction utilitaire pour créer le HTML d'une face de dé
-      function createFaceHTML(side, diceId) {
-        // NOTE: Ici, on ne crée qu'une seule face pour simplifier l'exemple.
-        // Une véritable implémentation de dé 3D est très complexe en CSS/JS.
-        // Nous affichons simplement le résultat.
-        return `<div class="dice" id="${diceId}">
-            <div class="face">
-              <span class="result">${side}</span>
-            </div>
-          </div>`;
-      }
+      function generate(){
+        const count = Math.max(1, Math.min(20, Number(numDigits.value)||3));
+        let min = Number(minNum.value)||1; let max = Number(maxNum.value)||9;
+        if(min>max){[min,max]=[max,min]}
+        const allow = allowDuplicates.value === 'true';
 
-      diceBtn.addEventListener('click', () => {
-        const count = parseInt(diceCountInput.value);
-        const sides = parseInt(diceSidesSelect.value);
-        let total = 0;
-        let html = '<div class="scene">'; // Début du conteneur de dés
-        
-        for (let i = 0; i < count; i++) {
-          // Lancer un dé : nombre aléatoire entre 1 et 'sides'
-          const roll = Math.floor(Math.random() * sides) + 1;
-          total += roll;
-          html += createFaceHTML(roll, `dice-${i}`);
-        }
-        
-        html += '</div>'; // Fin du conteneur de dés
-        html += `<p style="margin-top:10px;font-size:18px;font-weight:700">Total: <span class="result">${total}</span></p>`;
-        
-        diceOutput.innerHTML = html;
-      });
+        const rangeSize = max - min + 1;
+        if(!allow && count>rangeSize){
+          alert('Erreur: pas assez de valeurs uniques dans l\'intervalle. Baissez le nombre ou autorisez les doublons.');
+          return;
+        }
 
+        let pool = [];
+        if(allow){
+          for(let i=0;i<count;i++) pool.push(randomInt(min,max));
+        } else {
+          for(let v=min;v<=max;v++) pool.push(v);
+          // Fisher-Yates shuffle
+          for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+          pool = pool.slice(0,count);
+        }
 
-      // ------------------------------------
-      // 4. Logique du Minuteur
-      // ------------------------------------
-      const timerDisplay = document.getElementById('timer-display');
-      const timerStartBtn = document.getElementById('timer-start-btn');
-      const timerResetBtn = document.getElementById('timer-reset-btn');
-      const presets = document.querySelectorAll('.preset');
-      
-      let timeInSeconds = 0;
-      let timerInterval;
-      let isRunning = false;
+        ns.current = pool.slice();
+        renderBoxes(ns.current);
+        copyBtn.style.display = 'inline-flex';
+        copyBtn.textContent='Copier';
+      }
 
-      function formatTime(totalSeconds) {
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        const pad = (num) => String(num).padStart(2, '0');
-        return `${pad(minutes)}:${pad(seconds)}`;
-      }
+      function shuffle(){
+        if(!ns.current.length) return;
+        for(let i=ns.current.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ns.current[i],ns.current[j]]=[ns.current[j],ns.current[i]]}
+        renderBoxes(ns.current);
+      }
 
-      function updateTimerDisplay() {
-        timerDisplay.textContent = formatTime(timeInSeconds);
-      }
+      async function copySeq(){
+        if(!ns.current.length) return;
+        const txt = ns.current.join(' - ');
+        try{
+          await navigator.clipboard.writeText(txt);
+          copyBtn.textContent='Copié !';
+          setTimeout(()=>copyBtn.textContent='Copier',1200);
+        }catch(e){
+          // fallback
+          const ta = document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+          copyBtn.textContent='Copié !';setTimeout(()=>copyBtn.textContent='Copier',1200);
+        }
+      }
 
-      function startTimer() {
-        if (isRunning) return;
-        if (timeInSeconds <= 0) timeInSeconds = 60 * 5; // Default to 5 min if 0
+      generateBtn.addEventListener('click',generate);
+      shuffleBtn.addEventListener('click',shuffle);
+      copyBtn.addEventListener('click',copySeq);
 
-        isRunning = true;
-        timerStartBtn.textContent = 'Pause';
-        timerStartBtn.classList.remove('primary');
-        timerStartBtn.classList.add('ghost');
+      // init
+      generate();
+      ns.generate = generate; ns.shuffle = shuffle; ns.copy = copySeq;
+    })(WC.seq={});
 
-        timerInterval = setInterval(() => {
-          if (timeInSeconds > 0) {
-            timeInSeconds--;
-            updateTimerDisplay();
-          } else {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timerStartBtn.textContent = 'Démarrer';
-            timerStartBtn.classList.remove('ghost');
-            timerStartBtn.classList.add('primary');
-            alert("Le temps est écoulé !");
-          }
-        }, 1000);
-      }
+    /* ------------------ DICE MODULE ------------------ */
+    (function(ns){
+      const d1 = document.getElementById('dice1');
+      const d2 = document.getElementById('dice2');
+      const rollButton = document.getElementById('rollButton');
+      const rerollButton = document.getElementById('rerollButton');
+      const resultEl = document.getElementById('diceResult');
 
-      function pauseTimer() {
-        clearInterval(timerInterval);
-        isRunning = false;
-        timerStartBtn.textContent = 'Démarrer';
-        timerStartBtn.classList.remove('ghost');
-        timerStartBtn.classList.add('primary');
-      }
+      const rotations = {
+        1: 'rotateX(0deg) rotateY(0deg)',
+        2: 'rotateX(-90deg) rotateY(0deg)',
+        3: 'rotateX(0deg) rotateY(90deg)',
+        4: 'rotateX(0deg) rotateY(-90deg)',
+        5: 'rotateX(90deg) rotateY(0deg)',
+        6: 'rotateX(0deg) rotateY(180deg)'
+      };
 
-      function resetTimer() {
-        pauseTimer();
-        timeInSeconds = 0; // Remet à zéro
-        updateTimerDisplay();
-      }
+      function randomRoll(){return Math.floor(Math.random()*6)+1}
 
-      timerStartBtn.addEventListener('click', () => {
-        if (isRunning) {
-          pauseTimer();
-        } else {
-          startTimer();
-        }
-      });
+      function animateTo(die, value){
+        if(!die) return;
+        const tumbleX = Math.floor(Math.random()*4+2)*360;
+        const tumbleY = Math.floor(Math.random()*4+2)*360;
+        die.style.transition = 'transform 900ms cubic-bezier(.22,.9,.35,1)';
+        die.style.transform = `rotateX(${tumbleX}deg) rotateY(${tumbleY}deg)`;
+        setTimeout(()=>{
+          die.style.transition = 'transform 700ms cubic-bezier(.2,.8,.2,1)';
+          die.style.transform = rotations[value];
+        }, 240 + Math.random()*200);
+      }
 
-      timerResetBtn.addEventListener('click', resetTimer);
+      function roll(){
+        const r1 = randomRoll(); const r2 = randomRoll();
+        animateTo(d1,r1); animateTo(d2,r2);
+        resultEl.textContent = '...';
+        setTimeout(()=>{ resultEl.textContent = `${r1} + ${r2} = ${r1+r2}`; resultEl.setAttribute('aria-live','polite'); }, 1000);
+      }
 
-      presets.forEach(preset => {
-        preset.addEventListener('click', function() {
-          pauseTimer(); // Pause si un autre est lancé
-          timeInSeconds = parseInt(this.dataset.time);
-          updateTimerDisplay();
-        });
-      });
-      
-      // Initialisation: afficher 00:00 au chargement
-      updateTimerDisplay();
-    });
-  </script>
+      rollButton.addEventListener('click',roll);
+      rerollButton.addEventListener('click',()=>{ roll(); });
+
+      ns.roll = roll;
+    })(WC.dice={});
+
+    /* ------------------ TIMER MODULE ------------------ */
+    (function(ns){
+      const display = document.getElementById('timeDisplay');
+      const startPause = document.getElementById('startPauseBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const presetBtns = document.querySelectorAll('.preset');
+
+      let total = 0; let left = 0; let timerId = null; let running=false;
+
+      function parseTime(str){
+        const s = String(str).trim();
+        if(!s) return 0;
+        const parts = s.split(':').map(p=>p.trim());
+        if(parts.length===1){return Number(parts[0])||0}
+        const m = Number(parts[0])||0; const sec = Number(parts[1])||0; return m*60+sec;
+      }
+
+      function formatTime(sec){const m=Math.floor(sec/60);const s=sec%60;return String(m).padStart(2,'0')+":"+String(s).padStart(2,'0')}
+
+      function updateDisplay(){ display.textContent = formatTime(left); if(left<=10 && left>0) display.style.boxShadow='0 0 0 6px rgba(220,38,38,0.08)'; else display.style.boxShadow='none'; }
+
+      function playAlarm(){ try{ const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.type='sine'; o.frequency.setValueAtTime(880,audioCtx.currentTime); g.gain.setValueAtTime(0.6,audioCtx.currentTime); o.start(); setTimeout(()=>o.stop(),500);}catch(e){console.warn('Audio not available',e)} }
+
+      function tick(){ if(left>0){ left--; updateDisplay(); if(left===0){ stopTimer(); playAlarm(); startPause.textContent='Terminé'; startPause.disabled=true; } } }
+
+      function startTimer(){ if(!running){ if(total===0){ total = parseTime(display.textContent); left = total; } if(left<=0) return; timerId = setInterval(tick,1000); running=true; startPause.textContent='Pause'; display.contentEditable='false'; resetBtn.disabled=false; }}
+
+      function pauseTimer(){ if(running){ clearInterval(timerId); running=false; startPause.textContent='Reprendre'; display.contentEditable='true'; } }
+
+      function stopTimer(){ clearInterval(timerId); running=false; }
+
+      function resetTimer(toSeconds){ stopTimer(); total = toSeconds||0; left = total; updateDisplay(); display.contentEditable='true'; startPause.textContent='Démarrer'; startPause.disabled=false; resetBtn.disabled = (total===0); }
+
+      startPause.addEventListener('click',()=>{ if(!running) startTimer(); else pauseTimer(); });
+      resetBtn.addEventListener('click',()=>{ resetTimer(total); });
+
+      presetBtns.forEach(b=>b.addEventListener('click',()=>{ const t = Number(b.dataset.time)||0; resetTimer(t); }));
+
+      display.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); display.blur(); } });
+      display.addEventListener('blur',()=>{ const secs = parseTime(display.textContent); resetTimer(secs); });
+
+      // init
+      resetTimer(0);
+      ns.start=startTimer; ns.pause=pauseTimer; ns.reset=resetTimer;
+    })(WC.timer={});
+
+    /* ------------------ UTILITIES in ASIDE ------------------ */
+    (function(){
+      const copyAllBtn = document.getElementById('copyAllBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      copyAllBtn.addEventListener('click',async()=>{
+        const cfg = {
+          sequence: {min: Number(document.getElementById('minNum').value), max: Number(document.getElementById('maxNum').value), count: Number(document.getElementById('numDigits').value), allowDuplicates: document.getElementById('allowDuplicates').value},
+        };
+        try{ await navigator.clipboard.writeText(JSON.stringify(cfg,null,2)); copyAllBtn.textContent='Copié !'; setTimeout(()=>copyAllBtn.textContent='Copier la configuration (JSON)',1200);}catch(e){alert('Impossible de copier.');}
+      });
+
+      downloadBtn.addEventListener('click',()=>{
+        const html = '<!doctype html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([html],{type:'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download='workchops-toolbox.html'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      });
+    })();
+  </script>
 </body>
 </html>
